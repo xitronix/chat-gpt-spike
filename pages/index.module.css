@@ -62,6 +62,7 @@
   cursor: pointer;
 }
 .main .result {
+  width: 320px;
   font-weight: bold;
   margin-top: 40px;
 }
