@@ -9,32 +9,25 @@ export default async function (req, res) {
   if (!configuration.apiKey) {
     res.status(500).json({
       error: {
-        message: "OpenAI API key not configured, please follow instructions in README.md",
-      }
+        message:
+          "OpenAI API key not configured, please follow instructions in README.md",
+      },
     });
     return;
   }
 
-  const city = req.body.city || '';
-  if (city.trim().length === 0) {
-    res.status(400).json({
-      error: {
-        message: "Please enter a valid city",
-      }
-    });
-    return;
-  }
+  const messages = req.body.messages || [];
 
   try {
-    const completion = await openai.createCompletion({
-      max_tokens: 2000,
-      model: "text-davinci-003",
-      prompt: generatePrompt(city),
-      temperature: 0.8,
+    const completion = await openai.createChatCompletion({
+      // max_tokens: 512,
+      model: "gpt-3.5-turbo",
+      messages: [systemMsg, ...messages],
+      temperature: 0.3,
     });
-    console.log(completion.data)
-    res.status(200).json({ result: completion.data.choices[0].text });
-  } catch(error) {
+    console.log(completion.data);
+    res.status(200).json({ result: completion.data.choices[0].message });
+  } catch (error) {
     // Consider adjusting the error handling logic for your use case
     if (error.response) {
       console.error(error.response.status, error.response.data);
@@ -43,15 +36,15 @@ export default async function (req, res) {
       console.error(`Error with OpenAI API request: ${error.message}`);
       res.status(500).json({
         error: {
-          message: 'An error occurred during your request.',
-        }
+          message: "An error occurred during your request.",
+        },
       });
     }
   }
 }
 
-function generatePrompt(animal) {
-  const capitalizedCity =
-    animal[0].toUpperCase() + animal.slice(1).toLowerCase();
-  return `List suggestions of places, where you can go in the city. City is ${capitalizedCity}. Answer should consist of list of 3 places.`;
-}
+const systemMsg = {
+  role: "system",
+  content:
+    "You are a consultant, which want to help estimate cost of laptop. Ask client about laptop until you can estimate price. Give him estimated price at the end and add at the end: 'Glad to help you!'. ",
+};
