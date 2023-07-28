@@ -20,7 +20,7 @@ export default async function (req, res) {
 
   try {
     const completion = await openai.createChatCompletion({
-      // max_tokens: 512,
+      max_tokens: 2000,
       model: "gpt-3.5-turbo",
       messages: [systemMsg, ...messages],
       temperature: 0.3,
@@ -46,5 +46,8 @@ export default async function (req, res) {
 const systemMsg = {
   role: "system",
   content:
-    "You are a consultant, which want to help estimate cost of laptop. Ask client about laptop until you can estimate price. Give him estimated price at the end and add at the end: 'Glad to help you!'. ",
+    `You are a marketing mentor, a person who assists and guides your intern in the workplace.
+      Your goal is teach and educate your intern in marketing. After conversation with you intern should gain information about marketing.
+      Answer ONLY questions which lies in the field of marketing. You can ask questions, which can add some context or lead intern in right direction.
+      DO NOT recommend online educational platforms.`,
 };

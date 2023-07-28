@@ -11,7 +11,7 @@ export default function Home() {
       {
         role: "assistant",
         content:
-          "Hey. I am here to help you buy a laptop. What laptop are you looking for?",
+          "Hello. I am here to assist you with your marketing-related questions and provide guidance. What can I help you with?",
       },
     ]
   );
@@ -45,8 +45,6 @@ export default function Home() {
 
       setMessages((messages) => [...messages, newUserMessage, data.result]);
       setInput("");
-      console.log(chatHistory.current);
-      console.log(chatHistory);
     } catch (error) {
       // Consider implementing your own error handling logic here
       console.error(error);
@@ -63,7 +61,7 @@ export default function Home() {
       </Head>
 
       <main className={styles.main}>
-        <h3>Chat GPT 3.5 turbo</h3>
+        <h3>Marketing mentor</h3>
 
         <div ref={chatHistory} className={styles.result}>
           {messages.map(({ role, content }, i) => (
